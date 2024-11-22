@@ -18,7 +18,6 @@ public class AdoptionEventDAOImpl {
             ps.setString(2, eventDate);
             ps.executeUpdate();
 
-            // Retrieve the generated event ID
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 eventId = rs.getInt(1);
