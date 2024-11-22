@@ -125,7 +125,7 @@ public class MainModule {
     private static void manageAdoptionEvent(Scanner scanner) {
         try {
             System.out.print("Enter Event Name: ");
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
             String eventName = scanner.nextLine();
 
             System.out.print("Enter Event Date (yyyy-MM-dd): ");
