@@ -2,7 +2,6 @@ package dao;
 
 import entity.Pet;
 import util.DBConnUtil;
-import exception.InvalidPetAgeException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,26 +18,49 @@ public class PetDAOImpl {
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
-                pets.add(new Pet(rs.getString("name"), rs.getInt("age"), rs.getString("breed")));
+                String name = rs.getString("name");
+                int age = rs.getInt("age");
+                String breed = rs.getString("breed");
+                String type = rs.getString("type");
+                String specificDetail = rs.getString("specific_detail");
+
+                name = (name == null) ? "Unknown" : name;
+                breed = (breed == null) ? "Unknown" : breed;
+                type = (type == null) ? "Unknown" : type;
+                specificDetail = (specificDetail == null) ? "Unknown" : specificDetail;
+
+                Pet pet = new Pet(name, age, breed, type, specificDetail);
+                pets.add(pet);
             }
+        } catch (SQLException e) {
+            System.out.println("Database Error: " + e.getMessage());
+            throw e;
         }
 
         return pets;
     }
 
-    public void addPet(Pet pet) throws SQLException, InvalidPetAgeException {
-        if (pet.getAge() <= 0) {
-            throw new InvalidPetAgeException("Pet age must be a positive integer.");
-        }
 
-        String query = "INSERT INTO pets (name, age, breed) VALUES (?, ?, ?)";
+
+    public void addPet(Pet pet, String type, String specificDetail) throws SQLException {
+        String query = "INSERT INTO pets (name, age, breed, type, specific_detail) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnUtil.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, pet.getName());
             stmt.setInt(2, pet.getAge());
             stmt.setString(3, pet.getBreed());
-            stmt.executeUpdate();
+            stmt.setString(4, type);
+            stmt.setString(5, specificDetail);
+
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new SQLException("No pet added to the database.");
+            }
         }
     }
+
+
+
 }

@@ -27,7 +27,7 @@ public class MainModule {
         int choice;
 
         do {
-            System.out.println("\n=== PetPals Platform ===");
+            System.out.println("\n --- PetPals Platform ---");
             System.out.println("1. Display Pet Listings");
             System.out.println("2. Record Donation");
             System.out.println("3. Manage Adoption Event");
@@ -68,19 +68,36 @@ public class MainModule {
             System.out.print("Enter Pet Age: ");
             int age = scanner.nextInt();
 
-            Pet pet = new Pet(name, age, "Unknown Breed");
+            if (age < 0) {
+                throw new InvalidPetAgeException("Age cannot be less than 0.");
+            }
 
-            petDAO.addPet(pet);
+            System.out.print("Enter Pet Breed: ");
+            scanner.nextLine();
+            String breed = scanner.nextLine();
 
+            System.out.print("Enter Pet Type (e.g., Dog, Cat, etc.): ");
+            String type = scanner.nextLine();
+
+            System.out.print("Enter Pet Specific Detail (e.g., color, size, etc.): ");
+            String specificDetail = scanner.nextLine();
+
+            Pet pet = new Pet(name, age, breed, type, specificDetail);
+
+            petDAO.addPet(pet, type, specificDetail);
             System.out.println("Pet added successfully!");
+
         } catch (InvalidPetAgeException e) {
             System.out.println("Error: " + e.getMessage());
-            System.out.println("Pet added successfully!");
         } catch (SQLException e) {
             System.out.println("Database Error: " + e.getMessage());
-            System.out.println("Pet added successfully!");
         }
     }
+
+
+
+
+
 
     private static void displayPetListings() {
         try {
@@ -133,23 +150,28 @@ public class MainModule {
 
             int eventId = adoptionEventDAO.insertAdoptionEvent(eventName, eventDate);
 
+            System.out.println("Generated Event ID: " + eventId);
+
             if (eventId == -1) {
                 throw new AdoptionException("Event creation failed.");
             }
 
             System.out.print("Enter your Name to Register for the Event: ");
             String participantName = scanner.nextLine();
+
             Adopter adopter = new Adopter(participantName);
 
             adoptionEventDAO.registerParticipant(eventId, adopter);
 
             System.out.println("Event and participant registration successful!");
+
         } catch (AdoptionException e) {
             System.out.println("Error: " + e.getMessage());
         } catch (SQLException e) {
             System.out.println("Database Error: " + e.getMessage());
         }
     }
+
 
 
 }

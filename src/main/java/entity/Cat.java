@@ -1,10 +1,11 @@
 package entity;
 
+
 public class Cat extends Pet {
     private String catColor;
 
-    public Cat(String name, int age, String breed, String catColor) {
-        super(name, age, breed);
+    public Cat(String name, int age, String breed, String type, String specificDetail, String catColor) {
+        super(name, age, breed, type, specificDetail);
         this.catColor = catColor;
     }
 
