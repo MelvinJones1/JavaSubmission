@@ -6,7 +6,6 @@ import java.util.List;
 public class PetShelter {
     private List<Pet> availablePets;
 
-    // Constructor to initialize the list
     public PetShelter() {
         this.availablePets = new ArrayList<>();
     }

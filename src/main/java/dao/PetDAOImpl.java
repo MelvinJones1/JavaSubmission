@@ -27,7 +27,6 @@ public class PetDAOImpl {
     }
 
     public void addPet(Pet pet) throws SQLException, InvalidPetAgeException {
-        // Validate pet age
         if (pet.getAge() <= 0) {
             throw new InvalidPetAgeException("Pet age must be a positive integer.");
         }

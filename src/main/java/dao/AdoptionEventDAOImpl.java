@@ -8,7 +8,6 @@ import java.sql.*;
 
 public class AdoptionEventDAOImpl {
 
-    // Insert the adoption event and return the generated event ID
     public int insertAdoptionEvent(String eventName, String eventDate) throws SQLException {
         String query = "INSERT INTO adoption_events (event_name, event_date) VALUES (?, ?)";
         int eventId = -1;
@@ -28,14 +27,13 @@ public class AdoptionEventDAOImpl {
         return eventId;
     }
 
-    // Register the participant for the event using the generated event ID
     public void registerParticipant(int eventId, Adopter adopter) throws SQLException {
         String query = "INSERT INTO participants (event_id, participant_name) VALUES (?, ?)";
 
         try (Connection conn = DBConnUtil.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setInt(1, eventId);  // Use the event ID that was generated during event insertion
-            ps.setString(2, adopter.toString());  // Store participant's name
+            ps.setInt(1, eventId);
+            ps.setString(2, adopter.toString());
             ps.executeUpdate();
         }
     }

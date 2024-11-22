@@ -8,7 +8,6 @@ import java.sql.*;
 
 public class DonationDAOImpl {
 
-    // Record a new donation into the database
     public void recordDonation(Donation donation) throws SQLException {
         String query = "INSERT INTO donations (donor_name, amount, donation_date) VALUES (?, ?, ?)";
 
